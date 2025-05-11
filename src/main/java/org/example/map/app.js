@@ -10,7 +10,7 @@ const markers = L.layerGroup().addTo(map);
 // Load clinic data and initialize the application
 async function loadData() {
     try {
-        const response = await fetch('http://localhost:3000/getVeterinaries');
+        const response = await fetch('http://localhost:3001/api/data');
         const data = await response.json();
 
         const clinics = data.map(item => ({
@@ -60,7 +60,9 @@ function populateFilters(clinics) {
 
 // Filter clinics based on selections
 function filterClinics(city, type) {
-    const url = new URL('http://localhost:3000/getVeterinaries');
+    const url = new URL('http://localhost:3001/api/data');
+    if (city) url.searchParams.append('municipality', city);
+    if (type) url.searchParams.append('type', type);
 
     fetch(url)
         .then(response => response.json())
